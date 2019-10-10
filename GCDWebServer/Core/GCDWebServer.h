@@ -194,6 +194,11 @@ extern NSString* const GCDWebServerOption_ConnectedStateCoalescingInterval;
  */
 extern NSString* const GCDWebServerOption_DispatchQueuePriority;
 
+/**
+ * SecIdentityRef used for SSLContextSetCertificate
+ */
+extern NSString* const GCDWebServerOption_TlsIdentity;
+
 #if TARGET_OS_IPHONE
 
 /**

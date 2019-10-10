@@ -40,11 +40,9 @@
 #define kHeadersReadCapacity (1 * 1024)
 #define kBodyReadCapacity (256 * 1024)
 
-typedef void (^ReadDataCompletionBlock)(BOOL success);
 typedef void (^ReadHeadersCompletionBlock)(NSData* extraData);
 typedef void (^ReadBodyCompletionBlock)(BOOL success);
 
-typedef void (^WriteDataCompletionBlock)(BOOL success);
 typedef void (^WriteHeadersCompletionBlock)(BOOL success);
 typedef void (^WriteBodyCompletionBlock)(BOOL success);
 
@@ -60,14 +58,14 @@ static int32_t _connectionCounter = 0;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GCDWebServerConnection (Read)
-- (void)readData:(NSMutableData*)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block;
+- (void)_readData:(NSMutableData*)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block;
 - (void)readHeaders:(NSMutableData*)headersData withCompletionBlock:(ReadHeadersCompletionBlock)block;
 - (void)readBodyWithRemainingLength:(NSUInteger)length completionBlock:(ReadBodyCompletionBlock)block;
 - (void)readNextBodyChunk:(NSMutableData*)chunkData completionBlock:(ReadBodyCompletionBlock)block;
 @end
 
 @interface GCDWebServerConnection (Write)
-- (void)writeData:(NSData*)data withCompletionBlock:(WriteDataCompletionBlock)block;
+- (void)_writeData:(NSData*)data withCompletionBlock:(WriteDataCompletionBlock)block;
 - (void)writeHeadersWithCompletionBlock:(WriteHeadersCompletionBlock)block;
 - (void)writeBodyWithCompletionBlock:(WriteBodyCompletionBlock)block;
 @end
@@ -412,7 +410,7 @@ NS_ASSUME_NONNULL_END
 
 @implementation GCDWebServerConnection (Read)
 
-- (void)readData:(NSMutableData*)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block {
+- (void)_readData:(NSMutableData*)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block {
   dispatch_read(_socket, length, dispatch_get_global_queue(_server.dispatchQueuePriority, 0), ^(dispatch_data_t buffer, int error) {
     @autoreleasepool {
       if (error == 0) {
@@ -569,7 +567,7 @@ static inline NSUInteger _ScanHexNumber(const void* bytes, NSUInteger size) {
 
 @implementation GCDWebServerConnection (Write)
 
-- (void)writeData:(NSData*)data withCompletionBlock:(WriteDataCompletionBlock)block {
+- (void)_writeData:(NSData*)data withCompletionBlock:(WriteDataCompletionBlock)block {
   dispatch_data_t buffer = dispatch_data_create(data.bytes, data.length, dispatch_get_global_queue(_server.dispatchQueuePriority, 0), ^{
     [data self];  // Keeps ARC from releasing data too early
   });
@@ -795,7 +793,7 @@ static inline BOOL _CompareResources(NSString* responseETag, NSString* requestET
   GWS_DCHECK((statusCode >= 400) && (statusCode < 600));
   [self _initializeResponseHeadersWithStatusCode:statusCode];
   [self writeHeadersWithCompletionBlock:^(BOOL success) {
-    ;  // Nothing more to do
+    // Nothing more to do
   }];
   GWS_LOG_DEBUG(@"Connection aborted with status code %i on socket %i", (int)statusCode, _socket);
 }
@@ -838,6 +836,14 @@ static inline BOOL _CompareResources(NSString* responseETag, NSString* requestET
   } else {
     GWS_LOG_VERBOSE(@"[%@] %@ %i \"(invalid request)\" (%lu | %lu)", self.localAddressString, self.remoteAddressString, (int)_statusCode, (unsigned long)_totalBytesRead, (unsigned long)_totalBytesWritten);
   }
+}
+
+- (void)readData:(NSMutableData*)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block {
+  [self _readData:data withLength:length completionBlock:block];
+}
+
+- (void)writeData:(NSData*)data withCompletionBlock:(WriteDataCompletionBlock)block {
+  [self _writeData:data withCompletionBlock:block];
 }
 
 @end

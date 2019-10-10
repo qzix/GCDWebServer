@@ -28,6 +28,7 @@
 // GCDWebServer Core
 #import "GCDWebServer.h"
 #import "GCDWebServerConnection.h"
+#import "GCDWebServerTlsConnection.h"
 #import "GCDWebServerFunctions.h"
 #import "GCDWebServerHTTPStatusCodes.h"
 #import "GCDWebServerResponse.h"

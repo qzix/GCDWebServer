@@ -64,6 +64,7 @@ NSString* const GCDWebServerOption_ConnectionClass = @"ConnectionClass";
 NSString* const GCDWebServerOption_AutomaticallyMapHEADToGET = @"AutomaticallyMapHEADToGET";
 NSString* const GCDWebServerOption_ConnectedStateCoalescingInterval = @"ConnectedStateCoalescingInterval";
 NSString* const GCDWebServerOption_DispatchQueuePriority = @"DispatchQueuePriority";
+NSString* const GCDWebServerOption_TlsIdentity = @"TlsIdentity";
 #if TARGET_OS_IPHONE
 NSString* const GCDWebServerOption_AutomaticallySuspendInBackground = @"AutomaticallySuspendInBackground";
 #endif
@@ -167,6 +168,7 @@ static void _ExecuteMainThreadRunLoopSources() {
   NSString* _dnsAddress;
   NSUInteger _dnsPort;
   BOOL _bindToLocalhost;
+  NSString* _urlScheme;
 #if TARGET_OS_IPHONE
   BOOL _suspendInBackground;
   UIBackgroundTaskIdentifier _backgroundTask;
@@ -574,6 +576,8 @@ static inline NSString* _EncodeBase64(NSString* string) {
   _shouldAutomaticallyMapHEADToGET = [(NSNumber*)_GetOption(_options, GCDWebServerOption_AutomaticallyMapHEADToGET, @YES) boolValue];
   _disconnectDelay = [(NSNumber*)_GetOption(_options, GCDWebServerOption_ConnectedStateCoalescingInterval, @1.0) doubleValue];
   _dispatchQueuePriority = [(NSNumber*)_GetOption(_options, GCDWebServerOption_DispatchQueuePriority, @(DISPATCH_QUEUE_PRIORITY_DEFAULT)) longValue];
+  _tlsIdentity = (__bridge SecIdentityRef) _GetOption(_options, GCDWebServerOption_TlsIdentity, NULL);
+  _urlScheme =  _tlsIdentity != NULL ? @"https" : @"http";
 
   _source4 = [self _createDispatchSourceWithListeningSocket:listeningSocket4 isIPv6:NO];
   _source6 = [self _createDispatchSourceWithListeningSocket:listeningSocket6 isIPv6:YES];
@@ -785,9 +789,9 @@ static inline NSString* _EncodeBase64(NSString* string) {
     NSString* ipAddress = _bindToLocalhost ? @"localhost" : GCDWebServerGetPrimaryIPAddress(NO);  // We can't really use IPv6 anyway as it doesn't work great with HTTP URLs in practice
     if (ipAddress) {
       if (_port != 80) {
-        return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%i/", ipAddress, (int)_port]];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@:%i/", _urlScheme, ipAddress, (int)_port]];
       } else {
-        return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/", ipAddress]];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@/", _urlScheme, ipAddress]];
       }
     }
   }
@@ -800,9 +804,9 @@ static inline NSString* _EncodeBase64(NSString* string) {
     if (name.length) {
       name = [name substringToIndex:(name.length - 1)];  // Strip trailing period at end of domain
       if (_port != 80) {
-        return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:%i/", name, (int)_port]];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@:%i/", _urlScheme, name, (int)_port]];
       } else {
-        return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/", name]];
+        return [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@/", _urlScheme, name]];
       }
     }
   }

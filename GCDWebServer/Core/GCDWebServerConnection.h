@@ -178,6 +178,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)close;
 
+typedef void (^ReadDataCompletionBlock)(BOOL success);
+typedef void (^WriteDataCompletionBlock)(BOOL success);
+- (void)readData:(NSMutableData*)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block;
+- (void)writeData:(NSData*)data withCompletionBlock:(WriteDataCompletionBlock)block;
+
 @end
 
 NS_ASSUME_NONNULL_END

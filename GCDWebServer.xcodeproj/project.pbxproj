@@ -26,6 +26,12 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		341941E32B3020C02256A3F1 /* GCDWebServerTlsConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 341943F49945B70BBC421AF0 /* GCDWebServerTlsConnection.h */; };
+		341942E6817A8CAE0B475484 /* GCDWebServerTlsConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 341949CFFD5189B35ED979D0 /* GCDWebServerTlsConnection.m */; };
+		34194580D0401147485D54AC /* GCDWebServerTlsConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 341943F49945B70BBC421AF0 /* GCDWebServerTlsConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3419464A60811B3F9DD7444F /* GCDWebServerTlsConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 341949CFFD5189B35ED979D0 /* GCDWebServerTlsConnection.m */; };
+		341946CE3CC9E1D6781814E1 /* GCDWebServerTlsConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 341949CFFD5189B35ED979D0 /* GCDWebServerTlsConnection.m */; };
+		3419498D1A750870119AA3BB /* GCDWebServerTlsConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 341943F49945B70BBC421AF0 /* GCDWebServerTlsConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CEE28CF41AE0051F00F4023C /* GCDWebServers.h in Headers */ = {isa = PBXBuildFile; fileRef = CEE28CF31AE0051F00F4023C /* GCDWebServers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CEE28D091AE006C200F4023C /* GCDWebServer.h in Headers */ = {isa = PBXBuildFile; fileRef = E28BAE1618F99C810095C089 /* GCDWebServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CEE28D0A1AE006C300F4023C /* GCDWebServer.h in Headers */ = {isa = PBXBuildFile; fileRef = E28BAE1618F99C810095C089 /* GCDWebServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -282,6 +288,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		341943F49945B70BBC421AF0 /* GCDWebServerTlsConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDWebServerTlsConnection.h; sourceTree = "<group>"; };
+		341949CFFD5189B35ED979D0 /* GCDWebServerTlsConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDWebServerTlsConnection.m; sourceTree = "<group>"; };
 		8DD76FB20486AB0100D96B5E /* GCDWebServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GCDWebServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE28CD11AE004D800F4023C /* GCDWebServers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GCDWebServers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE28CEF1AE0051F00F4023C /* GCDWebServers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GCDWebServers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -536,6 +544,8 @@
 				E28BAE1F18F99C810095C089 /* GCDWebServerRequest.m */,
 				E28BAE2018F99C810095C089 /* GCDWebServerResponse.h */,
 				E28BAE2118F99C810095C089 /* GCDWebServerResponse.m */,
+				341949CFFD5189B35ED979D0 /* GCDWebServerTlsConnection.m */,
+				341943F49945B70BBC421AF0 /* GCDWebServerTlsConnection.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -650,6 +660,7 @@
 				CEE28D251AE0071E00F4023C /* GCDWebServerFileRequest.h in Headers */,
 				CEE28D411AE0077800F4023C /* GCDWebDAVServer.h in Headers */,
 				CEE28D471AE0078A00F4023C /* GCDWebUploader.h in Headers */,
+				34194580D0401147485D54AC /* GCDWebServerTlsConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,6 +685,7 @@
 				CEE28D361AE0074E00F4023C /* GCDWebServerErrorResponse.h in Headers */,
 				CEE28D421AE0077800F4023C /* GCDWebDAVServer.h in Headers */,
 				CEE28D481AE0078B00F4023C /* GCDWebUploader.h in Headers */,
+				3419498D1A750870119AA3BB /* GCDWebServerTlsConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,6 +710,7 @@
 				E2DDD1B31BE6947F002CE867 /* GCDWebDAVServer.h in Headers */,
 				E2DDD1B41BE6947F002CE867 /* GCDWebUploader.h in Headers */,
 				E2DDD1B51BE6947F002CE867 /* GCDWebServers.h in Headers */,
+				341941E32B3020C02256A3F1 /* GCDWebServerTlsConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,6 +1005,7 @@
 				CEE28D131AE006E900F4023C /* GCDWebServerFunctions.m in Sources */,
 				CEE28D371AE0075900F4023C /* GCDWebServerErrorResponse.m in Sources */,
 				CEE28D491AE0079100F4023C /* GCDWebUploader.m in Sources */,
+				341942E6817A8CAE0B475484 /* GCDWebServerTlsConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1014,6 +1028,7 @@
 				CEE28D141AE006EA00F4023C /* GCDWebServerFunctions.m in Sources */,
 				CEE28D381AE0075900F4023C /* GCDWebServerErrorResponse.m in Sources */,
 				CEE28D4A1AE0079200F4023C /* GCDWebUploader.m in Sources */,
+				341946CE3CC9E1D6781814E1 /* GCDWebServerTlsConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1044,6 +1059,7 @@
 				E2DDD1A21BE6945F002CE867 /* GCDWebServerStreamedResponse.m in Sources */,
 				E2DDD1A31BE6945F002CE867 /* GCDWebDAVServer.m in Sources */,
 				E2DDD1A41BE6945F002CE867 /* GCDWebUploader.m in Sources */,
+				3419464A60811B3F9DD7444F /* GCDWebServerTlsConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
