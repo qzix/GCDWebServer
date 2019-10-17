@@ -73,7 +73,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
     if (status != noErr) {
         GWS_LOG_ERROR(@"%@: Handshake failed with status %d", self, (int)status);
     } else {
-        GWS_LOG_INFO(@"%@: Handshake succeeded", self);
+        GWS_LOG_VERBOSE(@"%@: Handshake succeeded", self);
     }
 
     return status == noErr;
