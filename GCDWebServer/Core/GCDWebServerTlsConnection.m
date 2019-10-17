@@ -30,21 +30,21 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
     status = SSLSetIOFuncs(_sslContext, &SSLReadFunction, &SSLWriteFunction);
     if (status != noErr)
     {
-        GWS_LOG_ERROR(@"%@: SSLSetIOFuncs failed: %d", self, status);
+        GWS_LOG_ERROR(@"%@: SSLSetIOFuncs failed: %d", self, (int)status);
         return nil;
     }
 
     status = SSLSetConnection(_sslContext, (SSLConnectionRef) (intptr_t) socket);
     if (status != noErr)
     {
-        GWS_LOG_ERROR(@"%@: SSLSetConnection failed: %d", self, status);
+        GWS_LOG_ERROR(@"%@: SSLSetConnection failed: %d", self, (int)status);
         return nil;
     }
 
     status = SSLSetCertificate(_sslContext, (__bridge CFArrayRef) @[(__bridge id) server.tlsIdentity]);
     if (status != noErr)
     {
-        GWS_LOG_ERROR(@"%@: SSLSetCertificate failed: %d", self, status);
+        GWS_LOG_ERROR(@"%@: SSLSetCertificate failed: %d", self, (int)status);
         return nil;
     }
 
@@ -71,7 +71,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 
     OSStatus status = SSLHandshake(self->_sslContext);
     if (status != noErr) {
-        GWS_LOG_ERROR(@"%@: Handshake failed with status %d", self, status);
+        GWS_LOG_ERROR(@"%@: Handshake failed with status %d", self, (int)status);
     } else {
         GWS_LOG_INFO(@"%@: Handshake succeeded", self);
     }
@@ -90,7 +90,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
     if (status != noErr || bytesRead == 0)
     {
         free(buffer);
-        GWS_LOG_ERROR(@"%@: Failed to read data: %i", self.class, status);
+        GWS_LOG_ERROR(@"%@: Failed to read data: %d", self.class, (int)status);
         block(NO);
         return;
     }
@@ -110,7 +110,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
     size_t processed = 0;
     OSStatus status = SSLWrite(self->_sslContext, data.bytes, data.length, &processed);
     if (status != noErr) {
-        GWS_LOG_ERROR(@"%@: Failed to write data securely %i", self.class, status);
+        GWS_LOG_ERROR(@"%@: Failed to write data securely %d", self.class, (int)status);
         block(NO);
         return;
     }
