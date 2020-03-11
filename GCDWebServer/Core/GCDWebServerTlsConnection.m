@@ -8,6 +8,9 @@
 static OSStatus SSLReadFunction(SSLConnectionRef connection, void *data, size_t *dataLength);
 static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, size_t *dataLength);
 
+// 1mb
+static const NSUInteger kMaxBufferSize = 1048576;
+
 @implementation GCDWebServerTlsConnection
 {
     SSLContextRef _sslContext;
@@ -81,28 +84,28 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 
 - (void)readData:(NSMutableData*)data withLength:(NSUInteger)length completionBlock:(ReadDataCompletionBlock)block
 {
-    size_t trimmedLength = MIN(2048, length);
-    void *buffer = malloc(trimmedLength);
+    @autoreleasepool {
+        NSMutableData *buffer = [NSMutableData dataWithLength:MIN(kMaxBufferSize, length)];
 
-    size_t bytesRead = 0;
-    OSStatus status = SSLRead(self->_sslContext, buffer, trimmedLength, &bytesRead);
+        size_t bytesRead = 0;
+        OSStatus status = SSLRead(_sslContext, buffer.mutableBytes, buffer.length, &bytesRead);
 
-    if (status != noErr || bytesRead == 0)
-    {
-        free(buffer);
-        GWS_LOG_ERROR(@"%@: Failed to read data: %d", self.class, (int)status);
-        block(NO);
-        return;
+        if (status != noErr || bytesRead == 0)
+        {
+          GWS_LOG_ERROR(@"%@: Failed to read data: %d", self.class, (int)status);
+          block(NO);
+        }
+        else
+        {
+          buffer.length = bytesRead;
+          [data appendData:buffer];
+
+          [self didReadBytes:buffer.bytes
+                      length:buffer.length];
+
+          block(YES);
+        }
     }
-
-    NSUInteger originalLength = data.length;
-    [data appendBytes:buffer
-               length:bytesRead];
-    free(buffer);
-
-    [self didReadBytes:((char *) data.bytes + originalLength)
-                length:(data.length - originalLength)];
-    block(YES);
 }
 
 - (void)writeData:(NSData*)data withCompletionBlock:(WriteDataCompletionBlock)block
